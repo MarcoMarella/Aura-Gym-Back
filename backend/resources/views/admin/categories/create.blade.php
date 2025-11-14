@@ -1,46 +1,81 @@
 @extends('admin.layouts.app')
 
 @section('title', 'Nuova Categoria')
+@section('page-title', 'Nuova Categoria')
+@section('page-subtitle', 'Crea una nuova categoria per organizzare i prodotti')
 
 @section('content')
-<div class="space-y-6">
-    <div>
-        <h1 class="text-3xl font-bold text-gray-900">Nuova Categoria</h1>
-        <p class="mt-1 text-sm text-gray-600">Aggiungi una nuova categoria di prodotti</p>
-    </div>
+<form action="{{ route('admin.categories.store') }}" method="POST" class="max-w-2xl">
+    @csrf
 
-    <form action="{{ route('admin.categories.store') }}" method="POST" class="bg-white shadow rounded-lg p-6">
-        @csrf
-        
-        <div class="space-y-6">
-            <div>
-                <label for="name" class="block text-sm font-medium text-gray-700">Nome Categoria *</label>
-                <input type="text" name="name" id="name" required value="{{ old('name') }}"
-                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-purple-500 focus:border-purple-500">
-                @error('name')
-                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
+    <div class="glass-effect rounded-2xl p-6 space-y-6">
+        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg bg-accent-primary/20 flex items-center justify-center">
+                <i class="fas fa-tag text-accent-primary"></i>
             </div>
+            Informazioni Categoria
+        </h3>
 
-            <div>
-                <label for="description" class="block text-sm font-medium text-gray-700">Descrizione</label>
-                <textarea name="description" id="description" rows="3"
-                          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-purple-500 focus:border-purple-500">{{ old('description') }}</textarea>
-                @error('description')
-                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
+        <!-- Name -->
+        <div>
+            <label class="block text-sm font-semibold text-gray-300 mb-2">
+                Nome Categoria *
+            </label>
+            <input type="text" 
+                   name="name" 
+                   value="{{ old('name') }}"
+                   required
+                   class="w-full px-4 py-3 rounded-xl bg-dark-card border border-dark-border text-white placeholder-gray-500 focus:border-accent-primary focus:outline-none transition-all"
+                   placeholder="es. Abbigliamento">
+            @error('name')
+                <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+            @enderror
         </div>
 
-        <div class="mt-6 flex items-center justify-end space-x-3">
-            <a href="{{ route('admin.categories.index') }}" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
-                Annulla
-            </a>
-            <button type="submit" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700">
-                Crea Categoria
+        <!-- Slug -->
+        <div>
+            <label class="block text-sm font-semibold text-gray-300 mb-2">
+                Slug (URL) *
+            </label>
+            <input type="text" 
+                   name="slug" 
+                   value="{{ old('slug') }}"
+                   required
+                   class="w-full px-4 py-3 rounded-xl bg-dark-card border border-dark-border text-white placeholder-gray-500 focus:border-accent-primary focus:outline-none transition-all"
+                   placeholder="es. abbigliamento">
+            @error('slug')
+                <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <!-- Description -->
+        <div>
+            <label class="block text-sm font-semibold text-gray-300 mb-2">
+                Descrizione
+            </label>
+            <textarea name="description" 
+                      rows="4"
+                      class="w-full px-4 py-3 rounded-xl bg-dark-card border border-dark-border text-white placeholder-gray-500 focus:border-accent-primary focus:outline-none transition-all resize-none"
+                      placeholder="Descrivi la categoria...">{{ old('description') }}</textarea>
+            @error('description')
+                <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <!-- Actions -->
+        <div class="flex items-center gap-3 pt-4">
+            <button type="submit" 
+                    class="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-accent-primary to-accent-hover text-dark-bg font-semibold hover:shadow-lg hover:shadow-accent-primary/30 transition-all">
+                <i class="fas fa-save"></i>
+                <span>Crea Categoria</span>
             </button>
+            
+            <a href="{{ route('admin.categories.index') }}" 
+               class="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-dark-hover text-white font-semibold hover:bg-dark-border transition-all">
+                <i class="fas fa-times"></i>
+                <span>Annulla</span>
+            </a>
         </div>
-    </form>
-</div>
+    </div>
+</form>
 @endsection
-
