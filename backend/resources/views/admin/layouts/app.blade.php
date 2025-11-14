@@ -152,17 +152,6 @@
                 <i class="fas fa-shopping-cart text-lg w-5 text-center"></i>
                 <span x-show="sidebarOpen" class="text-sm">Ordini</span>
             </a>
-
-            <!-- Divider -->
-            <div class="border-t border-dark-border my-4"></div>
-
-            <!-- Settings -->
-            <a href="#" 
-               class="flex items-center gap-3 px-3 py-3 rounded-xl text-gray-400 hover:bg-dark-hover hover:text-white transition-all"
-            >
-                <i class="fas fa-cog text-lg w-5 text-center"></i>
-                <span x-show="sidebarOpen" class="text-sm">Impostazioni</span>
-            </a>
         </nav>
 
         <!-- User Profile -->
@@ -200,16 +189,18 @@
             </div>
             
             <div class="flex items-center gap-4">
-                <!-- Notifications -->
-                <button class="relative p-2 rounded-lg hover:bg-dark-hover text-gray-400 hover:text-accent-primary transition-all">
-                    <i class="fas fa-bell text-lg"></i>
-                    <span class="absolute top-1 right-1 w-2 h-2 bg-accent-primary rounded-full"></span>
-                </button>
-                
                 <!-- Time -->
-                <div class="hidden md:flex items-center gap-2 text-sm text-gray-400">
+                <div class="flex items-center gap-2 text-sm text-gray-400">
                     <i class="far fa-clock"></i>
                     <span id="current-time"></span>
+                </div>
+                
+                <!-- User Info -->
+                <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-dark-card border border-dark-border">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-accent-primary to-accent-hover flex items-center justify-center text-dark-bg font-bold text-sm">
+                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                    </div>
+                    <span class="text-sm text-white font-medium">{{ auth()->user()->name }}</span>
                 </div>
             </div>
         </header>
