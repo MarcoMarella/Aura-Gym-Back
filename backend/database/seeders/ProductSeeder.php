@@ -14,155 +14,161 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        $abbigliamento = Category::where('slug', 'abbigliamento')->first();
-        $integratori = Category::where('slug', 'integratori')->first();
-        $accessori = Category::where('slug', 'accessori')->first();
-        $attrezzatura = Category::where('slug', 'attrezzatura')->first();
+        // Categorie principali
+        $anime = Category::where('slug', 'anime')->first();
+        $videogiochi = Category::where('slug', 'videogiochi')->first();
+        
+        // Sottocategorie Anime
+        $animeMaglieOversize = Category::where('slug', 'anime-maglie-oversize')->first();
+        $animeMaglieFit = Category::where('slug', 'anime-maglie-fit')->first();
+        $animeCosplay = Category::where('slug', 'anime-maglia-cosplay')->first();
+        
+        // Sottocategorie Videogiochi
+        $vgMaglieOversize = Category::where('slug', 'videogiochi-maglie-oversize')->first();
+        $vgMaglieFit = Category::where('slug', 'videogiochi-maglie-fit')->first();
+        $vgCosplay = Category::where('slug', 'videogiochi-maglia-cosplay')->first();
+        
+        // Asciugamani
+        $asciugamani = Category::where('slug', 'asciugamani')->first();
 
         $products = [
-            // Abbigliamento
+            // ANIME - Maglie Oversize
             [
-                'category_id' => $abbigliamento->id,
-                'name' => 'T-Shirt Fitness Pro',
-                'slug' => 't-shirt-fitness-pro',
-                'description' => 'T-shirt tecnica traspirante per allenamenti intensi',
-                'price' => 29.99,
-                'sale_price' => 24.99,
+                'category_id' => $animeMaglieOversize->id,
+                'name' => 'Maglia Oversize Naruto Hokage',
+                'slug' => 'maglia-oversize-naruto-hokage',
+                'description' => 'Maglia oversize con stampa Naruto Hokage, stile street wear',
+                'price' => 34.99,
+                'sale_price' => 29.99,
                 'stock' => 50,
-                'image' => '/images/products/tshirt.jpg',
                 'is_active' => true,
                 'is_featured' => true,
             ],
             [
-                'category_id' => $abbigliamento->id,
-                'name' => 'Pantaloni da Training',
-                'slug' => 'pantaloni-da-training',
-                'description' => 'Pantaloni elasticizzati per massima libertà di movimento',
-                'price' => 49.99,
-                'stock' => 40,
-                'image' => '/images/products/pants.jpg',
-                'is_active' => true,
-                'is_featured' => false,
-            ],
-            [
-                'category_id' => $abbigliamento->id,
-                'name' => 'Felpa con Cappuccio',
-                'slug' => 'felpa-con-cappuccio',
-                'description' => 'Felpa comoda per il riscaldamento e il defaticamento',
-                'price' => 59.99,
-                'sale_price' => 49.99,
-                'stock' => 30,
-                'image' => '/images/products/hoodie.jpg',
+                'category_id' => $animeMaglieOversize->id,
+                'name' => 'Maglia Oversize One Piece Luffy',
+                'slug' => 'maglia-oversize-one-piece-luffy',
+                'description' => 'Maglia oversize con Rufy e la ciurma, taglio moderno',
+                'price' => 34.99,
+                'stock' => 45,
                 'is_active' => true,
                 'is_featured' => true,
             ],
             
-            // Integratori
+            // ANIME - Maglie Fit
             [
-                'category_id' => $integratori->id,
-                'name' => 'Proteine Whey 1kg',
-                'slug' => 'proteine-whey-1kg',
-                'description' => 'Proteine del siero del latte di alta qualità',
-                'price' => 39.99,
-                'sale_price' => 34.99,
-                'stock' => 100,
-                'image' => '/images/products/protein.jpg',
-                'is_active' => true,
-                'is_featured' => true,
-            ],
-            [
-                'category_id' => $integratori->id,
-                'name' => 'BCAA Aminoacidi',
-                'slug' => 'bcaa-aminoacidi',
-                'description' => 'Aminoacidi ramificati per il recupero muscolare',
-                'price' => 24.99,
-                'stock' => 80,
-                'image' => '/images/products/bcaa.jpg',
-                'is_active' => true,
-                'is_featured' => false,
-            ],
-            [
-                'category_id' => $integratori->id,
-                'name' => 'Pre-Workout Energy',
-                'slug' => 'pre-workout-energy',
-                'description' => 'Formula energetica per allenamenti intensi',
+                'category_id' => $animeMaglieFit->id,
+                'name' => 'Maglia Fit Attack on Titan',
+                'slug' => 'maglia-fit-attack-on-titan',
+                'description' => 'Maglia aderente con logo Scouting Legion',
                 'price' => 29.99,
                 'stock' => 60,
-                'image' => '/images/products/preworkout.jpg',
+                'is_active' => true,
+                'is_featured' => true,
+            ],
+            [
+                'category_id' => $animeMaglieFit->id,
+                'name' => 'Maglia Fit Dragon Ball Z Saiyan',
+                'slug' => 'maglia-fit-dragon-ball-z',
+                'description' => 'Maglia fit con simbolo Saiyan, perfetta per il gym',
+                'price' => 29.99,
+                'sale_price' => 24.99,
+                'stock' => 55,
+                'is_active' => true,
+                'is_featured' => false,
+            ],
+            
+            // ANIME - Cosplay
+            [
+                'category_id' => $animeCosplay->id,
+                'name' => 'Maglia Cosplay Akatsuki',
+                'slug' => 'maglia-cosplay-akatsuki',
+                'description' => 'Maglia cosplay dell\'organizzazione Akatsuki con nuvole rosse',
+                'price' => 39.99,
+                'stock' => 40,
                 'is_active' => true,
                 'is_featured' => true,
             ],
             
-            // Accessori
+            // VIDEOGIOCHI - Maglie Oversize
             [
-                'category_id' => $accessori->id,
-                'name' => 'Guanti da Palestra',
-                'slug' => 'guanti-da-palestra',
-                'description' => 'Guanti con grip antiscivolo per sollevamento pesi',
-                'price' => 19.99,
-                'sale_price' => 14.99,
-                'stock' => 70,
-                'image' => '/images/products/gloves.jpg',
+                'category_id' => $vgMaglieOversize->id,
+                'name' => 'Maglia Oversize GTA V Logo',
+                'slug' => 'maglia-oversize-gta-v',
+                'description' => 'Maglia oversize con icone di GTA V, stile urban',
+                'price' => 34.99,
+                'stock' => 50,
                 'is_active' => true,
-                'is_featured' => false,
+                'is_featured' => true,
             ],
             [
-                'category_id' => $accessori->id,
-                'name' => 'Borraccia Sportiva 1L',
-                'slug' => 'borraccia-sportiva-1l',
-                'description' => 'Borraccia termica per idratazione durante l\'allenamento',
-                'price' => 14.99,
-                'stock' => 90,
-                'image' => '/images/products/bottle.jpg',
-                'is_active' => true,
-                'is_featured' => false,
-            ],
-            [
-                'category_id' => $accessori->id,
-                'name' => 'Fascia da Polso',
-                'slug' => 'fascia-da-polso',
-                'description' => 'Fascia elastica di supporto per i polsi',
-                'price' => 12.99,
-                'stock' => 100,
-                'image' => '/images/products/wristband.jpg',
-                'is_active' => true,
-                'is_featured' => false,
-            ],
-            
-            // Attrezzatura
-            [
-                'category_id' => $attrezzatura->id,
-                'name' => 'Tappetino Yoga',
-                'slug' => 'tappetino-yoga',
-                'description' => 'Tappetino antiscivolo per yoga e pilates',
+                'category_id' => $vgMaglieOversize->id,
+                'name' => 'Maglia Oversize Fortnite Victory',
+                'slug' => 'maglia-oversize-fortnite',
+                'description' => 'Maglia oversize con grafica Victory Royale',
                 'price' => 34.99,
                 'sale_price' => 29.99,
                 'stock' => 45,
-                'image' => '/images/products/mat.jpg',
-                'is_active' => true,
-                'is_featured' => true,
-            ],
-            [
-                'category_id' => $attrezzatura->id,
-                'name' => 'Manubri 2x5kg',
-                'slug' => 'manubri-2x5kg',
-                'description' => 'Set di manubri rivestiti in neoprene',
-                'price' => 44.99,
-                'stock' => 35,
-                'image' => '/images/products/dumbbells.jpg',
-                'is_active' => true,
-                'is_featured' => true,
-            ],
-            [
-                'category_id' => $attrezzatura->id,
-                'name' => 'Elastici Fitness Set',
-                'slug' => 'elastici-fitness-set',
-                'description' => 'Set di 5 elastici con diverse resistenze',
-                'price' => 24.99,
-                'stock' => 55,
-                'image' => '/images/products/bands.jpg',
                 'is_active' => true,
                 'is_featured' => false,
+            ],
+            
+            // VIDEOGIOCHI - Maglie Fit
+            [
+                'category_id' => $vgMaglieFit->id,
+                'name' => 'Maglia Fit League of Legends',
+                'slug' => 'maglia-fit-league-of-legends',
+                'description' => 'Maglia fit con loghi dei campioni LoL',
+                'price' => 29.99,
+                'stock' => 60,
+                'is_active' => true,
+                'is_featured' => true,
+            ],
+            [
+                'category_id' => $vgMaglieFit->id,
+                'name' => 'Maglia Fit Valorant Agents',
+                'slug' => 'maglia-fit-valorant',
+                'description' => 'Maglia fit con design degli agenti Valorant',
+                'price' => 29.99,
+                'stock' => 55,
+                'is_active' => true,
+                'is_featured' => false,
+            ],
+            
+            // VIDEOGIOCHI - Cosplay
+            [
+                'category_id' => $vgCosplay->id,
+                'name' => 'Maglia Cosplay Mario Bros',
+                'slug' => 'maglia-cosplay-mario',
+                'description' => 'Maglia cosplay di Mario con dettagli autentici',
+                'price' => 39.99,
+                'sale_price' => 34.99,
+                'stock' => 35,
+                'is_active' => true,
+                'is_featured' => true,
+            ],
+            
+            // ASCIUGAMANI
+            [
+                'category_id' => $asciugamani->id,
+                'name' => 'Asciugamano Sportivo Gaming',
+                'slug' => 'asciugamano-sportivo-gaming',
+                'description' => 'Asciugamano in microfibra con logo gaming',
+                'price' => 19.99,
+                'stock' => 70,
+                'is_active' => true,
+                'is_featured' => false,
+            ],
+            [
+                'category_id' => $asciugamani->id,
+                'name' => 'Asciugamano Anime Limited',
+                'slug' => 'asciugamano-anime-limited',
+                'description' => 'Asciugamano edizione limitata con stampe anime',
+                'price' => 24.99,
+                'sale_price' => 19.99,
+                'stock' => 50,
+                'is_active' => true,
+                'is_featured' => true,
             ],
         ];
 

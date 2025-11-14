@@ -10,10 +10,23 @@ class Category extends Model
         'name',
         'slug',
         'description',
+        'parent_id',
     ];
 
     public function products()
     {
         return $this->hasMany(Product::class);
+    }
+
+    // Categoria padre
+    public function parent()
+    {
+        return $this->belongsTo(Category::class, 'parent_id');
+    }
+
+    // Sottocategorie
+    public function children()
+    {
+        return $this->hasMany(Category::class, 'parent_id');
     }
 }

@@ -14,11 +14,17 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Category::withCount('products');
+        $query = Category::with(['children', 'parent'])
+                        ->withCount('products');
 
         if ($request->has('search')) {
             $search = $request->search;
             $query->where('name', 'like', "%{$search}%");
+        }
+
+        // Se vogliamo solo le categorie principali (senza parent)
+        if ($request->has('parents_only') && $request->parents_only) {
+            $query->whereNull('parent_id');
         }
 
         $categories = $query->orderBy('name')->get();
@@ -34,6 +40,7 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'parent_id' => 'nullable|exists:categories,id',
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);
@@ -48,7 +55,9 @@ class CategoryController extends Controller
      */
     public function show(string $id)
     {
-        $category = Category::withCount('products')->findOrFail($id);
+        $category = Category::with(['children', 'parent'])
+                           ->withCount('products')
+                           ->findOrFail($id);
         return response()->json($category);
     }
 
@@ -62,6 +71,7 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'name' => 'sometimes|required|string|max:255',
             'description' => 'nullable|string',
+            'parent_id' => 'nullable|exists:categories,id',
         ]);
 
         if (isset($validated['name']) && $validated['name'] !== $category->name) {
