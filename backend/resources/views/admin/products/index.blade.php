@@ -40,14 +40,18 @@
             <div class="glass-effect rounded-2xl overflow-hidden group hover-glow cursor-pointer animate-slide-in">
                 <!-- Product Image -->
                 <div class="relative h-48 bg-gradient-to-br from-dark-hover to-dark-card flex items-center justify-center overflow-hidden">
-                    @if($product->image)
+                    @if($product->image && $product->image != '')
                         <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                     @else
                         <!-- Icona maglia lime per prodotti senza foto -->
-                        <div class="relative">
-                            <i class="fas fa-tshirt text-[120px] text-accent-primary/30 group-hover:text-accent-primary/50 transition-all duration-500"></i>
+                        <div class="relative w-full h-full flex items-center justify-center">
+                            <svg class="w-32 h-32 text-accent-primary opacity-30 group-hover:opacity-50 transition-all duration-500" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M16 3a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V3zM3 3a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H4a1 1 0 01-1-1V3zm6 10.5V9.618a4.553 4.553 0 002 .882v3h2V10.5a4.553 4.553 0 002-.882v3.882h2V8.618c.826-.518 1.5-1.265 1.95-2.168.088-.177.23-.445.43-.895A1 1 0 0120.764 5H3.236a1 1 0 00-.908 1.418c.2.45.342.718.43.895.45.903 1.124 1.65 1.95 2.168V13.5h2V10.5a4.553 4.553 0 002 .882v3h2V11.382a4.553 4.553 0 002-.882v3.882zM5 16a1 1 0 00-1 1v3a3 3 0 003 3h10a3 3 0 003-3v-3a1 1 0 00-1-1H5z"/>
+                            </svg>
                             <div class="absolute inset-0 flex items-center justify-center">
-                                <i class="fas fa-image-slash text-2xl text-gray-600"></i>
+                                <div class="w-16 h-16 rounded-full bg-dark-bg/80 backdrop-blur-sm flex items-center justify-center">
+                                    <i class="fas fa-image text-2xl text-gray-600"></i>
+                                </div>
                             </div>
                         </div>
                     @endif
