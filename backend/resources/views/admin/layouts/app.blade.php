@@ -261,5 +261,7 @@
         updateTime();
         setInterval(updateTime, 1000);
     </script>
+
+    @yield('scripts')
 </body>
 </html>

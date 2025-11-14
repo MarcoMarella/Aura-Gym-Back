@@ -26,17 +26,25 @@ class ProductController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:products,slug',
             'category_id' => 'nullable|exists:categories,id',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'sale_price' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
-            'image' => 'nullable|string',
+            'image' => 'nullable|image|mimes:png,webp|max:1536', // 1.5MB = 1536KB
             'is_active' => 'boolean',
             'is_featured' => 'boolean',
         ]);
 
-        $validated['slug'] = Str::slug($validated['name']);
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . Str::slug($validated['name']) . '.' . $image->extension();
+            $image->move(public_path('images/products'), $imageName);
+            $validated['image'] = '/images/products/' . $imageName;
+        }
+
         $validated['is_active'] = $request->has('is_active');
         $validated['is_featured'] = $request->has('is_featured');
 
@@ -62,17 +70,30 @@ class ProductController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:products,slug,' . $product->id,
             'category_id' => 'nullable|exists:categories,id',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'sale_price' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
-            'image' => 'nullable|string',
+            'image' => 'nullable|image|mimes:png,webp|max:1536', // 1.5MB = 1536KB
             'is_active' => 'boolean',
             'is_featured' => 'boolean',
         ]);
 
-        $validated['slug'] = Str::slug($validated['name']);
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($product->image && file_exists(public_path($product->image))) {
+                unlink(public_path($product->image));
+            }
+
+            $image = $request->file('image');
+            $imageName = time() . '_' . Str::slug($validated['name']) . '.' . $image->extension();
+            $image->move(public_path('images/products'), $imageName);
+            $validated['image'] = '/images/products/' . $imageName;
+        }
+
         $validated['is_active'] = $request->has('is_active');
         $validated['is_featured'] = $request->has('is_featured');
 

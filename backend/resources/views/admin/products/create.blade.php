@@ -53,6 +53,34 @@
                         @enderror
                     </div>
 
+                    <!-- Image Upload -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">
+                            Immagine Prodotto
+                        </label>
+                        <div class="relative">
+                            <input type="file" 
+                                   name="image" 
+                                   id="image"
+                                   accept=".png,.webp"
+                                   class="hidden"
+                                   onchange="previewImage(event)">
+                            <label for="image" 
+                                   class="flex items-center justify-center gap-3 w-full px-4 py-8 rounded-xl bg-dark-card border-2 border-dashed border-dark-border hover:border-accent-primary cursor-pointer transition-all group">
+                                <div id="preview-container" class="text-center">
+                                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-600 group-hover:text-accent-primary transition-colors mb-3"></i>
+                                    <p class="text-sm text-gray-400 group-hover:text-gray-300">
+                                        <span class="font-semibold text-accent-primary">Clicca per caricare</span> o trascina qui
+                                    </p>
+                                    <p class="text-xs text-gray-500 mt-1">PNG o WEBP (max 1.5MB)</p>
+                                </div>
+                            </label>
+                        </div>
+                        @error('image')
+                            <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+                        @enderror
+                    </div>
+
                     <!-- Description -->
                     <div>
                         <label class="block text-sm font-semibold text-gray-300 mb-2">
@@ -226,4 +254,44 @@
         </div>
     </div>
 </form>
+@endsection
+
+@section('scripts')
+<script>
+function previewImage(event) {
+    const file = event.target.files[0];
+    const previewContainer = document.getElementById('preview-container');
+    
+    if (file) {
+        // Check file size (1.5MB = 1572864 bytes)
+        if (file.size > 1572864) {
+            alert('Il file è troppo grande! Max 1.5MB');
+            event.target.value = '';
+            return;
+        }
+        
+        // Check file type
+        if (!['image/png', 'image/webp'].includes(file.type)) {
+            alert('Formato non supportato! Usa PNG o WEBP');
+            event.target.value = '';
+            return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewContainer.innerHTML = `
+                <div class="relative inline-block">
+                    <img src="${e.target.result}" class="w-32 h-32 object-cover rounded-xl border-2 border-accent-primary">
+                    <div class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-accent-primary flex items-center justify-center">
+                        <i class="fas fa-check text-dark-bg text-xs"></i>
+                    </div>
+                </div>
+                <p class="text-sm text-accent-primary mt-2 font-semibold">${file.name}</p>
+                <p class="text-xs text-gray-400">${(file.size / 1024).toFixed(2)} KB</p>
+            `;
+        };
+        reader.readAsDataURL(file);
+    }
+}
+</script>
 @endsection

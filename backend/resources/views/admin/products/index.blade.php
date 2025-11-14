@@ -43,7 +43,13 @@
                     @if($product->image)
                         <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                     @else
-                        <i class="fas fa-box text-6xl text-gray-700 group-hover:text-accent-primary transition-colors"></i>
+                        <!-- Icona maglia lime per prodotti senza foto -->
+                        <div class="relative">
+                            <i class="fas fa-tshirt text-[120px] text-accent-primary/30 group-hover:text-accent-primary/50 transition-all duration-500"></i>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <i class="fas fa-image-slash text-2xl text-gray-600"></i>
+                            </div>
+                        </div>
                     @endif
                     
                     <!-- Stock Badge -->
