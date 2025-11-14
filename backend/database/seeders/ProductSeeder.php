@@ -15,24 +15,24 @@ class ProductSeeder extends Seeder
     public function run(): void
     {
         // Categorie principali
-        $anime = Category::where('slug', 'anime')->first();
-        $videogiochi = Category::where('slug', 'videogiochi')->first();
+        $anime = Category::where('slug', 'gym-anime')->first();
+        $videogiochi = Category::where('slug', 'gym-game')->first();
         
-        // Sottocategorie Anime
-        $animeMaglieOversize = Category::where('slug', 'anime-maglie-oversize')->first();
-        $animeMaglieFit = Category::where('slug', 'anime-maglie-fit')->first();
-        $animeCosplay = Category::where('slug', 'anime-maglia-cosplay')->first();
+        // Sottocategorie Gym Anime
+        $animeMaglieOversize = Category::where('slug', 'gym-anime-maglie-oversize')->first();
+        $animeMaglieFit = Category::where('slug', 'gym-anime-maglie-fit')->first();
+        $animeCosplay = Category::where('slug', 'gym-anime-maglia-cosplay')->first();
         
-        // Sottocategorie Videogiochi
-        $vgMaglieOversize = Category::where('slug', 'videogiochi-maglie-oversize')->first();
-        $vgMaglieFit = Category::where('slug', 'videogiochi-maglie-fit')->first();
-        $vgCosplay = Category::where('slug', 'videogiochi-maglia-cosplay')->first();
+        // Sottocategorie Gym Game
+        $vgMaglieOversize = Category::where('slug', 'gym-game-maglie-oversize')->first();
+        $vgMaglieFit = Category::where('slug', 'gym-game-maglie-fit')->first();
+        $vgCosplay = Category::where('slug', 'gym-game-maglia-cosplay')->first();
         
         // Asciugamani
         $asciugamani = Category::where('slug', 'asciugamani')->first();
 
         $products = [
-            // ANIME - Maglie Oversize
+            // GYM ANIME - Maglie Oversize
             [
                 'category_id' => $animeMaglieOversize->id,
                 'name' => 'Maglia Oversize Naruto Hokage',
@@ -55,7 +55,7 @@ class ProductSeeder extends Seeder
                 'is_featured' => true,
             ],
             
-            // ANIME - Maglie Fit
+            // GYM ANIME - Maglie Fit
             [
                 'category_id' => $animeMaglieFit->id,
                 'name' => 'Maglia Fit Attack on Titan',
@@ -78,7 +78,7 @@ class ProductSeeder extends Seeder
                 'is_featured' => false,
             ],
             
-            // ANIME - Cosplay
+            // GYM ANIME - Cosplay
             [
                 'category_id' => $animeCosplay->id,
                 'name' => 'Maglia Cosplay Akatsuki',
@@ -90,7 +90,7 @@ class ProductSeeder extends Seeder
                 'is_featured' => true,
             ],
             
-            // VIDEOGIOCHI - Maglie Oversize
+            // GYM GAME - Maglie Oversize
             [
                 'category_id' => $vgMaglieOversize->id,
                 'name' => 'Maglia Oversize GTA V Logo',
@@ -113,7 +113,7 @@ class ProductSeeder extends Seeder
                 'is_featured' => false,
             ],
             
-            // VIDEOGIOCHI - Maglie Fit
+            // GYM GAME - Maglie Fit
             [
                 'category_id' => $vgMaglieFit->id,
                 'name' => 'Maglia Fit League of Legends',
@@ -135,7 +135,7 @@ class ProductSeeder extends Seeder
                 'is_featured' => false,
             ],
             
-            // VIDEOGIOCHI - Cosplay
+            // GYM GAME - Cosplay
             [
                 'category_id' => $vgCosplay->id,
                 'name' => 'Maglia Cosplay Mario Bros',

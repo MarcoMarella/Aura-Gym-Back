@@ -15,59 +15,59 @@ class CategorySeeder extends Seeder
     {
         // Categorie Principali
         $anime = Category::create([
-            'name' => 'Anime',
-            'slug' => 'anime',
+            'name' => 'Gym Anime',
+            'slug' => 'gym-anime',
             'description' => 'Collezione ispirata agli anime più iconici',
             'parent_id' => null,
         ]);
 
         $videogiochi = Category::create([
-            'name' => 'Videogiochi',
-            'slug' => 'videogiochi',
+            'name' => 'Gym Game',
+            'slug' => 'gym-game',
             'description' => 'Collezione ispirata ai videogiochi cult',
             'parent_id' => null,
         ]);
 
-        // Sottocategorie per Anime
+        // Sottocategorie per Gym Anime
         Category::create([
             'name' => 'Maglie Oversize',
-            'slug' => 'anime-maglie-oversize',
+            'slug' => 'gym-anime-maglie-oversize',
             'description' => 'Maglie oversize con stampe anime',
             'parent_id' => $anime->id,
         ]);
 
         Category::create([
             'name' => 'Maglie Fit',
-            'slug' => 'anime-maglie-fit',
+            'slug' => 'gym-anime-maglie-fit',
             'description' => 'Maglie fit con stampe anime',
             'parent_id' => $anime->id,
         ]);
 
         Category::create([
             'name' => 'Maglia Cosplay',
-            'slug' => 'anime-maglia-cosplay',
+            'slug' => 'gym-anime-maglia-cosplay',
             'description' => 'Maglie cosplay di personaggi anime',
             'parent_id' => $anime->id,
         ]);
 
-        // Sottocategorie per Videogiochi
+        // Sottocategorie per Gym Game
         Category::create([
             'name' => 'Maglie Oversize',
-            'slug' => 'videogiochi-maglie-oversize',
+            'slug' => 'gym-game-maglie-oversize',
             'description' => 'Maglie oversize con stampe da videogiochi',
             'parent_id' => $videogiochi->id,
         ]);
 
         Category::create([
             'name' => 'Maglie Fit',
-            'slug' => 'videogiochi-maglie-fit',
+            'slug' => 'gym-game-maglie-fit',
             'description' => 'Maglie fit con stampe da videogiochi',
             'parent_id' => $videogiochi->id,
         ]);
 
         Category::create([
             'name' => 'Maglia Cosplay',
-            'slug' => 'videogiochi-maglia-cosplay',
+            'slug' => 'gym-game-maglia-cosplay',
             'description' => 'Maglie cosplay di personaggi videogiochi',
             'parent_id' => $videogiochi->id,
         ]);
