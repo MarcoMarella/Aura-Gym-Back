@@ -8,16 +8,14 @@ use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 
 // Redirect root to admin login
 Route::get('/', function () {
-    return redirect()->route('admin.login');
+    return redirect('/admin/login');
 });
 
 // Admin routes
 Route::prefix('admin')->name('admin.')->group(function () {
-    // Auth routes (public)
-    Route::middleware('guest')->group(function () {
-        Route::get('login', [AuthController::class, 'showLogin'])->name('login');
-        Route::post('login', [AuthController::class, 'login']);
-    });
+    // Auth routes (public - NO middleware guest to avoid redirect loop)
+    Route::get('login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('login', [AuthController::class, 'login']);
 
     // Protected admin routes
     Route::middleware('auth')->group(function () {
