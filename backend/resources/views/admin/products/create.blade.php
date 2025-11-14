@@ -1,109 +1,229 @@
 @extends('admin.layouts.app')
 
 @section('title', 'Nuovo Prodotto')
+@section('page-title', 'Nuovo Prodotto')
+@section('page-subtitle', 'Aggiungi un nuovo prodotto al catalogo')
 
 @section('content')
-<div class="space-y-6">
-    <div>
-        <h1 class="text-3xl font-bold text-gray-900">Nuovo Prodotto</h1>
-        <p class="mt-1 text-sm text-gray-600">Aggiungi un nuovo prodotto al catalogo</p>
+<form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+    @csrf
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Main Info -->
+        <div class="lg:col-span-2 space-y-6">
+            <!-- Basic Info Card -->
+            <div class="glass-effect rounded-2xl p-6">
+                <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-accent-primary/20 flex items-center justify-center">
+                        <i class="fas fa-info-circle text-accent-primary"></i>
+                    </div>
+                    Informazioni Base
+                </h3>
+
+                <div class="space-y-4">
+                    <!-- Name -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">
+                            Nome Prodotto *
+                        </label>
+                        <input type="text" 
+                               name="name" 
+                               value="{{ old('name') }}"
+                               required
+                               class="w-full px-4 py-3 rounded-xl bg-dark-card border border-dark-border text-white placeholder-gray-500 focus:border-accent-primary focus:outline-none transition-all"
+                               placeholder="es. T-Shirt Fitness Pro">
+                        @error('name')
+                            <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Slug -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">
+                            Slug (URL) *
+                        </label>
+                        <input type="text" 
+                               name="slug" 
+                               value="{{ old('slug') }}"
+                               required
+                               class="w-full px-4 py-3 rounded-xl bg-dark-card border border-dark-border text-white placeholder-gray-500 focus:border-accent-primary focus:outline-none transition-all"
+                               placeholder="es. t-shirt-fitness-pro">
+                        @error('slug')
+                            <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Description -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">
+                            Descrizione
+                        </label>
+                        <textarea name="description" 
+                                  rows="4"
+                                  class="w-full px-4 py-3 rounded-xl bg-dark-card border border-dark-border text-white placeholder-gray-500 focus:border-accent-primary focus:outline-none transition-all resize-none"
+                                  placeholder="Descrivi il prodotto...">{{ old('description') }}</textarea>
+                        @error('description')
+                            <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pricing Card -->
+            <div class="glass-effect rounded-2xl p-6">
+                <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center">
+                        <i class="fas fa-euro-sign text-purple-400"></i>
+                    </div>
+                    Prezzi e Magazzino
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Price -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">
+                            Prezzo *
+                        </label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">€</span>
+                            <input type="number" 
+                                   name="price" 
+                                   value="{{ old('price') }}"
+                                   step="0.01"
+                                   required
+                                   class="w-full pl-8 pr-4 py-3 rounded-xl bg-dark-card border border-dark-border text-white placeholder-gray-500 focus:border-accent-primary focus:outline-none transition-all"
+                                   placeholder="0.00">
+                        </div>
+                        @error('price')
+                            <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Sale Price -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">
+                            Prezzo Scontato
+                        </label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">€</span>
+                            <input type="number" 
+                                   name="sale_price" 
+                                   value="{{ old('sale_price') }}"
+                                   step="0.01"
+                                   class="w-full pl-8 pr-4 py-3 rounded-xl bg-dark-card border border-dark-border text-white placeholder-gray-500 focus:border-accent-primary focus:outline-none transition-all"
+                                   placeholder="0.00">
+                        </div>
+                        @error('sale_price')
+                            <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Stock -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">
+                            Giacenza *
+                        </label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">
+                                <i class="fas fa-cube"></i>
+                            </span>
+                            <input type="number" 
+                                   name="stock" 
+                                   value="{{ old('stock', 0) }}"
+                                   required
+                                   class="w-full pl-10 pr-4 py-3 rounded-xl bg-dark-card border border-dark-border text-white placeholder-gray-500 focus:border-accent-primary focus:outline-none transition-all"
+                                   placeholder="0">
+                        </div>
+                        @error('stock')
+                            <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="space-y-6">
+            <!-- Category & Status Card -->
+            <div class="glass-effect rounded-2xl p-6">
+                <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                        <i class="fas fa-cog text-blue-400"></i>
+                    </div>
+                    Impostazioni
+                </h3>
+
+                <div class="space-y-4">
+                    <!-- Category -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-300 mb-2">
+                            Categoria
+                        </label>
+                        <select name="category_id" 
+                                class="w-full px-4 py-3 rounded-xl bg-dark-card border border-dark-border text-white focus:border-accent-primary focus:outline-none transition-all">
+                            <option value="">Nessuna categoria</option>
+                            @foreach(\App\Models\Category::all() as $category)
+                                <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('category_id')
+                            <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Active Status -->
+                    <div class="flex items-center justify-between p-4 rounded-xl bg-dark-hover">
+                        <div>
+                            <p class="text-sm font-semibold text-white">Prodotto Attivo</p>
+                            <p class="text-xs text-gray-400">Visibile nel catalogo</p>
+                        </div>
+                        <input type="checkbox" 
+                               name="is_active" 
+                               value="1"
+                               {{ old('is_active', true) ? 'checked' : '' }}
+                               class="w-12 h-6 appearance-none bg-dark-border rounded-full relative cursor-pointer transition-all
+                                      checked:bg-accent-primary
+                                      before:content-[''] before:absolute before:w-5 before:h-5 before:rounded-full before:bg-white before:top-0.5 before:left-0.5 before:transition-all
+                                      checked:before:left-6">
+                    </div>
+
+                    <!-- Featured Status -->
+                    <div class="flex items-center justify-between p-4 rounded-xl bg-dark-hover">
+                        <div>
+                            <p class="text-sm font-semibold text-white">In Evidenza</p>
+                            <p class="text-xs text-gray-400">Mostra in homepage</p>
+                        </div>
+                        <input type="checkbox" 
+                               name="is_featured" 
+                               value="1"
+                               {{ old('is_featured') ? 'checked' : '' }}
+                               class="w-12 h-6 appearance-none bg-dark-border rounded-full relative cursor-pointer transition-all
+                                      checked:bg-accent-primary
+                                      before:content-[''] before:absolute before:w-5 before:h-5 before:rounded-full before:bg-white before:top-0.5 before:left-0.5 before:transition-all
+                                      checked:before:left-6">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="glass-effect rounded-2xl p-6">
+                <div class="space-y-3">
+                    <button type="submit" 
+                            class="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-accent-primary to-accent-hover text-dark-bg font-semibold hover:shadow-lg hover:shadow-accent-primary/30 transition-all">
+                        <i class="fas fa-save"></i>
+                        <span>Salva Prodotto</span>
+                    </button>
+                    
+                    <a href="{{ route('admin.products.index') }}" 
+                       class="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-dark-hover text-white font-semibold hover:bg-dark-border transition-all">
+                        <i class="fas fa-times"></i>
+                        <span>Annulla</span>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <form action="{{ route('admin.products.store') }}" method="POST" class="bg-white shadow rounded-lg p-6">
-        @csrf
-        
-        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            <div class="col-span-2 sm:col-span-1">
-                <label for="name" class="block text-sm font-medium text-gray-700">Nome Prodotto *</label>
-                <input type="text" name="name" id="name" required value="{{ old('name') }}"
-                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-purple-500 focus:border-purple-500">
-                @error('name')
-                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <div class="col-span-2 sm:col-span-1">
-                <label for="category_id" class="block text-sm font-medium text-gray-700">Categoria</label>
-                <select name="category_id" id="category_id"
-                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-purple-500 focus:border-purple-500">
-                    <option value="">Seleziona categoria</option>
-                    @foreach($categories as $category)
-                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                        {{ $category->name }}
-                    </option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="col-span-2">
-                <label for="description" class="block text-sm font-medium text-gray-700">Descrizione</label>
-                <textarea name="description" id="description" rows="3"
-                          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-purple-500 focus:border-purple-500">{{ old('description') }}</textarea>
-            </div>
-
-            <div class="col-span-2 sm:col-span-1">
-                <label for="price" class="block text-sm font-medium text-gray-700">Prezzo *</label>
-                <div class="mt-1 relative rounded-md shadow-sm">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <span class="text-gray-500 sm:text-sm">€</span>
-                    </div>
-                    <input type="number" step="0.01" name="price" id="price" required value="{{ old('price') }}"
-                           class="block w-full pl-7 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-purple-500 focus:border-purple-500">
-                </div>
-            </div>
-
-            <div class="col-span-2 sm:col-span-1">
-                <label for="sale_price" class="block text-sm font-medium text-gray-700">Prezzo Scontato</label>
-                <div class="mt-1 relative rounded-md shadow-sm">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <span class="text-gray-500 sm:text-sm">€</span>
-                    </div>
-                    <input type="number" step="0.01" name="sale_price" id="sale_price" value="{{ old('sale_price') }}"
-                           class="block w-full pl-7 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-purple-500 focus:border-purple-500">
-                </div>
-            </div>
-
-            <div class="col-span-2 sm:col-span-1">
-                <label for="stock" class="block text-sm font-medium text-gray-700">Quantità Stock *</label>
-                <input type="number" name="stock" id="stock" required value="{{ old('stock', 0) }}"
-                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-purple-500 focus:border-purple-500">
-            </div>
-
-            <div class="col-span-2 sm:col-span-1">
-                <label for="image" class="block text-sm font-medium text-gray-700">URL Immagine</label>
-                <input type="url" name="image" id="image" value="{{ old('image') }}"
-                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-purple-500 focus:border-purple-500">
-            </div>
-
-            <div class="col-span-2">
-                <div class="flex items-center space-x-6">
-                    <div class="flex items-center">
-                        <input type="checkbox" name="is_active" id="is_active" value="1" {{ old('is_active', true) ? 'checked' : '' }}
-                               class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded">
-                        <label for="is_active" class="ml-2 block text-sm text-gray-900">
-                            Prodotto Attivo
-                        </label>
-                    </div>
-                    <div class="flex items-center">
-                        <input type="checkbox" name="is_featured" id="is_featured" value="1" {{ old('is_featured') ? 'checked' : '' }}
-                               class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded">
-                        <label for="is_featured" class="ml-2 block text-sm text-gray-900">
-                            In Evidenza
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="mt-6 flex items-center justify-end space-x-3">
-            <a href="{{ route('admin.products.index') }}" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
-                Annulla
-            </a>
-            <button type="submit" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700">
-                Crea Prodotto
-            </button>
-        </div>
-    </form>
-</div>
+</form>
 @endsection
-

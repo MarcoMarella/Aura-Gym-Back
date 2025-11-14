@@ -1,98 +1,196 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Gestione Prodotti')
+@section('title', 'Prodotti')
+@section('page-title', 'Gestione Prodotti')
+@section('page-subtitle', 'Visualizza e gestisci tutti i prodotti del tuo catalogo')
 
 @section('content')
 <div class="space-y-6">
-    <div class="flex justify-between items-center">
-        <div>
-            <h1 class="text-3xl font-bold text-gray-900">Prodotti</h1>
-            <p class="mt-1 text-sm text-gray-600">Gestisci tutti i prodotti del negozio</p>
+    
+    <!-- Header Actions -->
+    <div class="flex items-center justify-between">
+        <div class="flex items-center gap-4">
+            <!-- Search -->
+            <div class="relative">
+                <input type="text" 
+                       placeholder="Cerca prodotti..." 
+                       class="w-80 pl-10 pr-4 py-2.5 rounded-xl bg-dark-card border border-dark-border text-white placeholder-gray-500 focus:border-accent-primary focus:outline-none transition-all">
+                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"></i>
+            </div>
+            
+            <!-- Filter -->
+            <select class="px-4 py-2.5 rounded-xl bg-dark-card border border-dark-border text-white focus:border-accent-primary focus:outline-none transition-all">
+                <option>Tutte le categorie</option>
+                <option>Abbigliamento</option>
+                <option>Integratori</option>
+                <option>Accessori</option>
+            </select>
         </div>
-        <a href="{{ route('admin.products.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700">
-            <i class="fas fa-plus mr-2"></i> Nuovo Prodotto
+
+        <a href="{{ route('admin.products.create') }}" 
+           class="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-accent-primary to-accent-hover text-dark-bg font-semibold hover:shadow-lg hover:shadow-accent-primary/30 transition-all">
+            <i class="fas fa-plus"></i>
+            <span>Nuovo Prodotto</span>
         </a>
     </div>
 
-    <div class="bg-white shadow rounded-lg">
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prodotto</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Categoria</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prezzo</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stato</th>
-                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Azioni</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    @forelse($products as $product)
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex items-center">
-                                @if($product->image)
-                                <div class="flex-shrink-0 h-10 w-10">
-                                    <img class="h-10 w-10 rounded-full object-cover" src="{{ $product->image }}" alt="{{ $product->name }}">
-                                </div>
-                                @endif
-                                <div class="ml-4">
-                                    <div class="text-sm font-medium text-gray-900">{{ $product->name }}</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {{ $product->category->name ?? 'N/A' }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            € {{ number_format($product->price, 2, ',', '.') }}
+    <!-- Products Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        @forelse($products as $product)
+            <div class="glass-effect rounded-2xl overflow-hidden group hover-glow cursor-pointer animate-slide-in">
+                <!-- Product Image -->
+                <div class="relative h-48 bg-gradient-to-br from-dark-hover to-dark-card flex items-center justify-center overflow-hidden">
+                    @if($product->image)
+                        <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    @else
+                        <i class="fas fa-box text-6xl text-gray-700 group-hover:text-accent-primary transition-colors"></i>
+                    @endif
+                    
+                    <!-- Stock Badge -->
+                    <div class="absolute top-3 right-3">
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-md
+                            {{ $product->stock > 10 ? 'bg-green-500/20 text-green-400 border border-green-500/30' : '' }}
+                            {{ $product->stock > 0 && $product->stock <= 10 ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' : '' }}
+                            {{ $product->stock <= 0 ? 'bg-red-500/20 text-red-400 border border-red-500/30' : '' }}
+                        ">
+                            <i class="fas fa-cube mr-1"></i>
+                            {{ $product->stock }}
+                        </span>
+                    </div>
+
+                    <!-- Featured Badge -->
+                    @if($product->is_featured)
+                        <div class="absolute top-3 left-3">
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-md bg-accent-primary/20 text-accent-primary border border-accent-primary/30">
+                                <i class="fas fa-star mr-1"></i>
+                                In evidenza
+                            </span>
+                        </div>
+                    @endif
+
+                    <!-- Quick Actions Overlay -->
+                    <div class="absolute inset-0 bg-dark-bg/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                        <a href="{{ route('admin.products.edit', $product) }}" 
+                           class="w-10 h-10 rounded-lg bg-blue-500 flex items-center justify-center hover:bg-blue-600 transition-all">
+                            <i class="fas fa-edit text-white"></i>
+                        </a>
+                        <form action="{{ route('admin.products.destroy', $product) }}" method="POST" class="inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" 
+                                    onclick="return confirm('Sei sicuro di voler eliminare questo prodotto?')"
+                                    class="w-10 h-10 rounded-lg bg-red-500 flex items-center justify-center hover:bg-red-600 transition-all">
+                                <i class="fas fa-trash text-white"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="p-4">
+                    <!-- Category -->
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-xs text-gray-500">
+                            <i class="fas fa-tag mr-1"></i>
+                            {{ $product->category->name ?? 'Nessuna' }}
+                        </span>
+                    </div>
+
+                    <!-- Name -->
+                    <h3 class="text-lg font-bold text-white mb-2 line-clamp-1">
+                        {{ $product->name }}
+                    </h3>
+
+                    <!-- Description -->
+                    <p class="text-sm text-gray-400 mb-4 line-clamp-2 min-h-[40px]">
+                        {{ $product->description }}
+                    </p>
+
+                    <!-- Price & Actions -->
+                    <div class="flex items-center justify-between">
+                        <div>
                             @if($product->sale_price)
-                            <br><span class="text-red-600 font-semibold">€ {{ number_format($product->sale_price, 2, ',', '.') }}</span>
+                                <div class="flex items-baseline gap-2">
+                                    <span class="text-2xl font-bold text-accent-primary">€{{ number_format($product->sale_price, 2) }}</span>
+                                    <span class="text-sm text-gray-500 line-through">€{{ number_format($product->price, 2) }}</span>
+                                </div>
+                            @else
+                                <span class="text-2xl font-bold text-accent-primary">€{{ number_format($product->price, 2) }}</span>
                             @endif
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            <span class="@if($product->stock < 10) text-red-600 font-bold @endif">
-                                {{ $product->stock }}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $product->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                {{ $product->is_active ? 'Attivo' : 'Non Attivo' }}
-                            </span>
-                            @if($product->is_featured)
-                            <span class="ml-1 px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">
-                                In Evidenza
-                            </span>
-                            @endif
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <a href="{{ route('admin.products.edit', $product) }}" class="text-blue-600 hover:text-blue-900 mr-3">
-                                <i class="fas fa-edit"></i> Modifica
-                            </a>
-                            <form action="{{ route('admin.products.destroy', $product) }}" method="POST" class="inline-block" onsubmit="return confirm('Sei sicuro di voler eliminare questo prodotto?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:text-red-900">
-                                    <i class="fas fa-trash"></i> Elimina
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-500">
-                            Nessun prodotto trovato
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-        <div class="px-6 py-4">
-            {{ $products->links() }}
-        </div>
+                        </div>
+                        
+                        <!-- Status Toggle -->
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" 
+                                   {{ $product->is_active ? 'checked' : '' }}
+                                   class="w-10 h-5 appearance-none bg-dark-border rounded-full relative cursor-pointer transition-all
+                                          checked:bg-accent-primary
+                                          before:content-[''] before:absolute before:w-4 before:h-4 before:rounded-full before:bg-white before:top-0.5 before:left-0.5 before:transition-all
+                                          checked:before:left-5"
+                                   onchange="this.form.submit()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @empty
+            <div class="col-span-full">
+                <div class="glass-effect rounded-2xl p-12 text-center">
+                    <div class="w-20 h-20 rounded-full bg-dark-hover flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-box text-4xl text-gray-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Nessun prodotto ancora</h3>
+                    <p class="text-gray-400 mb-6">Inizia ad aggiungere prodotti al tuo catalogo</p>
+                    <a href="{{ route('admin.products.create') }}" 
+                       class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-accent-primary to-accent-hover text-dark-bg font-semibold hover:shadow-lg hover:shadow-accent-primary/30 transition-all">
+                        <i class="fas fa-plus"></i>
+                        <span>Crea il primo prodotto</span>
+                    </a>
+                </div>
+            </div>
+        @endforelse
     </div>
+
+    <!-- Pagination -->
+    @if($products->hasPages())
+        <div class="flex items-center justify-between glass-effect rounded-xl p-4">
+            <div class="text-sm text-gray-400">
+                Mostrando <span class="text-white font-semibold">{{ $products->firstItem() }}</span> - 
+                <span class="text-white font-semibold">{{ $products->lastItem() }}</span> di 
+                <span class="text-white font-semibold">{{ $products->total() }}</span> prodotti
+            </div>
+            
+            <div class="flex items-center gap-2">
+                @if($products->onFirstPage())
+                    <span class="px-4 py-2 rounded-lg bg-dark-hover text-gray-600 cursor-not-allowed">
+                        <i class="fas fa-chevron-left"></i>
+                    </span>
+                @else
+                    <a href="{{ $products->previousPageUrl() }}" 
+                       class="px-4 py-2 rounded-lg bg-dark-hover hover:bg-accent-primary/20 hover:text-accent-primary transition-all">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                @endif
+
+                @foreach($products->getUrlRange(1, $products->lastPage()) as $page => $url)
+                    <a href="{{ $url }}" 
+                       class="px-4 py-2 rounded-lg transition-all {{ $page == $products->currentPage() ? 'bg-gradient-to-r from-accent-primary to-accent-hover text-dark-bg font-semibold' : 'bg-dark-hover hover:bg-accent-primary/20 hover:text-accent-primary' }}">
+                        {{ $page }}
+                    </a>
+                @endforeach
+
+                @if($products->hasMorePages())
+                    <a href="{{ $products->nextPageUrl() }}" 
+                       class="px-4 py-2 rounded-lg bg-dark-hover hover:bg-accent-primary/20 hover:text-accent-primary transition-all">
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                @else
+                    <span class="px-4 py-2 rounded-lg bg-dark-hover text-gray-600 cursor-not-allowed">
+                        <i class="fas fa-chevron-right"></i>
+                    </span>
+                @endif
+            </div>
+        </div>
+    @endif
+
 </div>
 @endsection
-
