@@ -202,10 +202,25 @@
                         <select name="category_id" 
                                 class="w-full px-4 py-3 rounded-xl bg-dark-card border border-dark-border text-white focus:border-accent-primary focus:outline-none transition-all">
                             <option value="">Nessuna categoria</option>
-                            @foreach(\App\Models\Category::all() as $category)
-                                <option value="{{ $category->id }}" {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}>
-                                    {{ $category->name }}
-                                </option>
+                            
+                            @php
+                                $parentCategories = \App\Models\Category::whereNull('parent_id')->with('children')->get();
+                            @endphp
+                            
+                            @foreach($parentCategories as $parent)
+                                <optgroup label="{{ $parent->name }}">
+                                    @if($parent->children->count() > 0)
+                                        @foreach($parent->children as $child)
+                                            <option value="{{ $child->id }}" {{ old('category_id', $product->category_id) == $child->id ? 'selected' : '' }}>
+                                                └ {{ $child->name }}
+                                            </option>
+                                        @endforeach
+                                    @else
+                                        <option value="{{ $parent->id }}" {{ old('category_id', $product->category_id) == $parent->id ? 'selected' : '' }}>
+                                            {{ $parent->name }}
+                                        </option>
+                                    @endif
+                                </optgroup>
                             @endforeach
                         </select>
                         @error('category_id')
