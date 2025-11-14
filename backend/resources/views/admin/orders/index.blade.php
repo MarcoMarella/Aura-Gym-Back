@@ -1,21 +1,20 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Gestione Ordini')
+@section('title', 'Ordini')
+@section('page-title', 'Gestione Ordini')
+@section('page-subtitle', 'Visualizza e gestisci tutti gli ordini ricevuti')
 
 @section('content')
 <div class="space-y-6">
-    <div class="flex justify-between items-center">
-        <div>
-            <h1 class="text-3xl font-bold text-gray-900">Ordini</h1>
-            <p class="mt-1 text-sm text-gray-600">Gestisci tutti gli ordini</p>
-        </div>
-    </div>
-
-    <div class="bg-white shadow rounded-lg">
-        <div class="px-4 py-3 border-b border-gray-200">
-            <form method="GET" class="flex items-center space-x-4">
-                <select name="status" onchange="this.form.submit()"
-                        class="block border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-purple-500 focus:border-purple-500">
+    
+    <!-- Header Actions -->
+    <div class="flex items-center justify-between">
+        <div class="flex items-center gap-4">
+            <!-- Filter by Status -->
+            <form method="GET" class="flex items-center gap-2">
+                <select name="status" 
+                        onchange="this.form.submit()"
+                        class="px-4 py-2.5 rounded-xl bg-dark-card border border-dark-border text-white focus:border-accent-primary focus:outline-none transition-all">
                     <option value="">Tutti gli stati</option>
                     <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>In Attesa</option>
                     <option value="processing" {{ request('status') == 'processing' ? 'selected' : '' }}>In Elaborazione</option>
@@ -25,95 +24,165 @@
                 </select>
             </form>
         </div>
+
+        <div class="flex items-center gap-2">
+            <span class="text-sm text-gray-400">{{ $orders->total() }} ordini totali</span>
+        </div>
+    </div>
+
+    <!-- Orders List -->
+    <div class="glass-effect rounded-2xl overflow-hidden">
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">N° Ordine</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Totale</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stato</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pagamento</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
-                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Azioni</th>
+            <table class="min-w-full divide-y divide-dark-border">
+                <thead>
+                    <tr class="bg-dark-hover">
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                            N° Ordine
+                        </th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                            Cliente
+                        </th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                            Totale
+                        </th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                            Stato
+                        </th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                            Pagamento
+                        </th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                            Data
+                        </th>
+                        <th class="px-6 py-4 text-right text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                            Azioni
+                        </th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
+                <tbody class="divide-y divide-dark-border">
                     @forelse($orders as $order)
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                            {{ $order->order_number }}
+                    <tr class="hover:bg-dark-hover transition-colors">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center gap-2">
+                                <div class="w-2 h-2 rounded-full 
+                                    {{ $order->status === 'pending' ? 'bg-yellow-400' : '' }}
+                                    {{ $order->status === 'processing' ? 'bg-blue-400' : '' }}
+                                    {{ $order->status === 'shipped' ? 'bg-purple-400' : '' }}
+                                    {{ $order->status === 'delivered' ? 'bg-green-400' : '' }}
+                                    {{ $order->status === 'cancelled' ? 'bg-red-400' : '' }}
+                                "></div>
+                                <span class="text-sm font-semibold text-white">{{ $order->order_number }}</span>
+                            </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm font-medium text-gray-900">{{ $order->customer_name }}</div>
-                            <div class="text-sm text-gray-500">{{ $order->customer_email }}</div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">
-                            € {{ number_format($order->total, 2, ',', '.') }}
+                            <div>
+                                <div class="text-sm font-semibold text-white">{{ $order->customer_name }}</div>
+                                <div class="text-xs text-gray-400">{{ $order->customer_email }}</div>
+                            </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            @php
-                                $statusColors = [
-                                    'pending' => 'bg-yellow-100 text-yellow-800',
-                                    'processing' => 'bg-blue-100 text-blue-800',
-                                    'shipped' => 'bg-purple-100 text-purple-800',
-                                    'delivered' => 'bg-green-100 text-green-800',
-                                    'cancelled' => 'bg-red-100 text-red-800',
-                                ];
-                                $statusLabels = [
-                                    'pending' => 'In Attesa',
-                                    'processing' => 'In Elaborazione',
-                                    'shipped' => 'Spedito',
-                                    'delivered' => 'Consegnato',
-                                    'cancelled' => 'Annullato',
-                                ];
-                            @endphp
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusColors[$order->status] ?? 'bg-gray-100 text-gray-800' }}">
-                                {{ $statusLabels[$order->status] ?? $order->status }}
+                            <span class="text-lg font-bold text-accent-primary">€{{ number_format($order->total, 2) }}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold
+                                {{ $order->status === 'pending' ? 'bg-yellow-500/20 text-yellow-400' : '' }}
+                                {{ $order->status === 'processing' ? 'bg-blue-500/20 text-blue-400' : '' }}
+                                {{ $order->status === 'shipped' ? 'bg-purple-500/20 text-purple-400' : '' }}
+                                {{ $order->status === 'delivered' ? 'bg-green-500/20 text-green-400' : '' }}
+                                {{ $order->status === 'cancelled' ? 'bg-red-500/20 text-red-400' : '' }}
+                            ">
+                                {{ $order->status === 'pending' ? 'In Attesa' : '' }}
+                                {{ $order->status === 'processing' ? 'In Elaborazione' : '' }}
+                                {{ $order->status === 'shipped' ? 'Spedito' : '' }}
+                                {{ $order->status === 'delivered' ? 'Consegnato' : '' }}
+                                {{ $order->status === 'cancelled' ? 'Annullato' : '' }}
                             </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            @php
-                                $paymentColors = [
-                                    'pending' => 'bg-yellow-100 text-yellow-800',
-                                    'paid' => 'bg-green-100 text-green-800',
-                                    'failed' => 'bg-red-100 text-red-800',
-                                    'refunded' => 'bg-gray-100 text-gray-800',
-                                ];
-                                $paymentLabels = [
-                                    'pending' => 'In Attesa',
-                                    'paid' => 'Pagato',
-                                    'failed' => 'Fallito',
-                                    'refunded' => 'Rimborsato',
-                                ];
-                            @endphp
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $paymentColors[$order->payment_status] ?? 'bg-gray-100 text-gray-800' }}">
-                                {{ $paymentLabels[$order->payment_status] ?? $order->payment_status }}
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold
+                                {{ $order->payment_status === 'pending' ? 'bg-yellow-500/20 text-yellow-400' : '' }}
+                                {{ $order->payment_status === 'paid' ? 'bg-green-500/20 text-green-400' : '' }}
+                                {{ $order->payment_status === 'failed' ? 'bg-red-500/20 text-red-400' : '' }}
+                                {{ $order->payment_status === 'refunded' ? 'bg-gray-500/20 text-gray-400' : '' }}
+                            ">
+                                {{ $order->payment_status === 'pending' ? 'In Attesa' : '' }}
+                                {{ $order->payment_status === 'paid' ? 'Pagato' : '' }}
+                                {{ $order->payment_status === 'failed' ? 'Fallito' : '' }}
+                                {{ $order->payment_status === 'refunded' ? 'Rimborsato' : '' }}
                             </span>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
                             {{ $order->created_at->format('d/m/Y H:i') }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <a href="{{ route('admin.orders.show', $order) }}" class="text-purple-600 hover:text-purple-900">
-                                <i class="fas fa-eye"></i> Vedi
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <a href="{{ route('admin.orders.show', $order) }}" 
+                               class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-accent-primary/10 text-accent-primary hover:bg-accent-primary/20 transition-all">
+                                <i class="fas fa-eye"></i>
+                                <span>Vedi</span>
                             </a>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="7" class="px-6 py-4 text-center text-sm text-gray-500">
-                            Nessun ordine trovato
+                        <td colspan="7" class="px-6 py-12 text-center">
+                            <div class="flex flex-col items-center gap-4">
+                                <div class="w-16 h-16 rounded-full bg-dark-hover flex items-center justify-center">
+                                    <i class="fas fa-shopping-cart text-3xl text-gray-600"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-semibold text-white mb-1">Nessun ordine trovato</h3>
+                                    <p class="text-sm text-gray-400">Non ci sono ordini con i filtri selezionati</p>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-        <div class="px-6 py-4">
-            {{ $orders->links() }}
-        </div>
+
+        <!-- Pagination -->
+        @if($orders->hasPages())
+            <div class="flex items-center justify-between px-6 py-4 border-t border-dark-border">
+                <div class="text-sm text-gray-400">
+                    Mostrando <span class="text-white font-semibold">{{ $orders->firstItem() }}</span> - 
+                    <span class="text-white font-semibold">{{ $orders->lastItem() }}</span> di 
+                    <span class="text-white font-semibold">{{ $orders->total() }}</span> ordini
+                </div>
+                
+                <div class="flex items-center gap-2">
+                    @if($orders->onFirstPage())
+                        <span class="px-4 py-2 rounded-lg bg-dark-hover text-gray-600 cursor-not-allowed">
+                            <i class="fas fa-chevron-left"></i>
+                        </span>
+                    @else
+                        <a href="{{ $orders->previousPageUrl() }}" 
+                           class="px-4 py-2 rounded-lg bg-dark-hover hover:bg-accent-primary/20 hover:text-accent-primary transition-all">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    @endif
+
+                    @foreach($orders->getUrlRange(1, $orders->lastPage()) as $page => $url)
+                        <a href="{{ $url }}" 
+                           class="px-4 py-2 rounded-lg transition-all {{ $page == $orders->currentPage() ? 'bg-gradient-to-r from-accent-primary to-accent-hover text-dark-bg font-semibold' : 'bg-dark-hover hover:bg-accent-primary/20 hover:text-accent-primary' }}">
+                            {{ $page }}
+                        </a>
+                    @endforeach
+
+                    @if($orders->hasMorePages())
+                        <a href="{{ $orders->nextPageUrl() }}" 
+                           class="px-4 py-2 rounded-lg bg-dark-hover hover:bg-accent-primary/20 hover:text-accent-primary transition-all">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    @else
+                        <span class="px-4 py-2 rounded-lg bg-dark-hover text-gray-600 cursor-not-allowed">
+                            <i class="fas fa-chevron-right"></i>
+                        </span>
+                    @endif
+                </div>
+            </div>
+        @endif
     </div>
+
 </div>
 @endsection
-
